@@ -1,0 +1,18 @@
+name: DevSecOps Automated Secrets Scanner
+
+on: 
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-security-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Repository Code
+        uses: actions/checkout@v4
+
+      - name: Execute Python Defense Scanner
+        run: python check_for_passwords.py
