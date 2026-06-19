@@ -1,4 +1,4 @@
-name: DevSecOps Automated Secrets Scanner
+name: DevSecOps Secret Scanner (Gitleaks)
 
 on: 
   push:
@@ -7,12 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  run-security-checks:
+  scan-secrets:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Download the code (fetch-depth: 0 tells it to grab the entire history)
       - name: Download Repository Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Execute Python Defense Scanner
-        run: python check_for_passwords.py
+      # 2. Run the official open-source Gitleaks scanner
+      - name: Execute Gitleaks Scanner
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
